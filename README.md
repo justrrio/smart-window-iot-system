@@ -95,7 +95,7 @@ The **Smart Window IoT System** is an automated window control solution designed
 
 ![Application Architecture Diagram](images/application-architecture.png)
 
-### Data Flow Diagram (PlantUML)
+### Data Flow Diagram
 
 ![Application Architecture Diagram](images/data-flow.png)
 
