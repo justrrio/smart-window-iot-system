@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Smart Window IoT Dashboard</title>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>
+                <span>🪟</span>
+                Smart Window IoT Dashboard
+            </h1>
+            <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+                <div class="status-badge" id="mqttStatus">
+                    <span class="status-dot inactive"></span>
+                    <span>Disconnected</span>
+                </div>
+                <button class="reconnect-btn" id="reconnectBtn" onclick="manualReconnect()">
+                    🔄 Reconnect
+                </button>
+            </div>
+        </div>
+
+        <!-- Connection Info -->
+        <div class="connection-info">
+            <h2>📡 Informasi Koneksi MQTT</h2>
+            <div class="info-grid">
+                <div class="info-item">
+                    <span class="info-label">Server</span>
+                    <span class="info-value" id="mqttServer">-</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Port</span>
+                    <span class="info-value" id="mqttPort">-</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Client ID</span>
+                    <span class="info-value" id="clientId">-</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Status</span>
+                    <span class="info-value" id="connectionStatus">Menunggu...</span>
+                </div>
+            </div>
+            <div class="reconnect-info" id="reconnectInfo"></div>
+        </div>
+
+        <!-- Dashboard Cards -->
+        <div class="dashboard-grid">
+            <!-- Temperature Card -->
+            <div class="card sensor-temp">
+                <div class="card-header">
+                    <span class="card-title">Sensor DHT11</span>
+                    <div class="card-icon">🌡️</div>
+                </div>
+                <div class="card-value" id="temperature">--</div>
+                <div class="card-subtitle">Suhu Ruangan</div>
+                <div class="last-update" id="tempLastUpdate">Belum ada data</div>
+            </div>
+
+            <!-- Infrared Sensor Card -->
+            <div class="card sensor-ir">
+                <div class="card-header">
+                    <span class="card-title">Sensor Infrared</span>
+                    <div class="card-icon">📡</div>
+                </div>
+                <div class="card-value" style="font-size: 24px;" id="irStatus">--</div>
+                <div class="card-subtitle">Deteksi Objek</div>
+                <div class="last-update" id="irLastUpdate">Belum ada data</div>
+            </div>
+
+            <!-- Servo Motor Card -->
+            <div class="card actuator-servo">
+                <div class="card-header">
+                    <span class="card-title">Motor Servo</span>
+                    <div class="card-icon">🔧</div>
+                </div>
+                <div class="card-value" style="font-size: 24px;" id="servoStatus">--</div>
+                <div class="card-subtitle">Status Jendela</div>
+                <div class="last-update" id="servoLastUpdate">Belum ada data</div>
+            </div>
+
+            <!-- LED RGB Card -->
+            <div class="card actuator-led">
+                <div class="card-header">
+                    <span class="card-title">LED RGB</span>
+                    <div class="card-icon">💡</div>
+                </div>
+                <div class="card-value" style="font-size: 24px;" id="ledStatus">--</div>
+                <div class="card-subtitle">Warna Indikator</div>
+                <div class="led-preview no-data" id="ledPreview">No Data</div>
+            </div>
+        </div>
+
+        <!-- Topics Section -->
+        <div class="topics-section">
+            <h2>📋 MQTT Topics yang Tersedia</h2>
+            <div class="topics-list">
+                <div class="topic-item">
+                    <div>
+                        <div class="topic-name">sensor/dht</div>
+                        <div class="last-update">Menerima data suhu dari sensor DHT11</div>
+                    </div>
+                    <span class="topic-type sensor">SENSOR</span>
+                </div>
+                <div class="topic-item">
+                    <div>
+                        <div class="topic-name">sensor/infrared</div>
+                        <div class="last-update">Menerima status deteksi objek (DETECTED/NOT DETECTED)</div>
+                    </div>
+                    <span class="topic-type sensor">SENSOR</span>
+                </div>
+                <div class="topic-item actuator">
+                    <div>
+                        <div class="topic-name">aktuator/servo</div>
+                        <div class="last-update">Status jendela (OPEN/CLOSED)</div>
+                    </div>
+                    <span class="topic-type actuator">ACTUATOR</span>
+                </div>
+                <div class="topic-item actuator">
+                    <div>
+                        <div class="topic-name">aktuator/led</div>
+                        <div class="last-update">Warna LED saat ini (RED/GREEN)</div>
+                    </div>
+                    <span class="topic-type actuator">ACTUATOR</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://unpkg.com/mqtt@4.3.7/dist/mqtt.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>MQTT Publisher - Testing Dashboard</title>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>
+                <span>📤</span>
+                MQTT Publisher - Testing Tool
+            </h1>
+            <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+                <div class="status-badge" id="mqttStatus">
+                    <span class="status-dot inactive"></span>
+                    <span>Disconnected</span>
+                </div>
+                <button class="reconnect-btn" id="reconnectBtn" onclick="manualReconnect()">
+                    🔄 Reconnect
+                </button>
+            </div>
+        </div>
+
+        <!-- Connection Info -->
+        <div class="connection-info">
+            <h2>📡 Informasi Koneksi MQTT</h2>
+            <div class="info-grid">
+                <div class="info-item">
+                    <span class="info-label">Server</span>
+                    <span class="info-value" id="mqttServer">-</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Port</span>
+                    <span class="info-value" id="mqttPort">-</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Client ID</span>
+                    <span class="info-value" id="clientId">-</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Status</span>
+                    <span class="info-value" id="connectionStatus">Menunggu...</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Publisher Cards -->
+        <div class="publisher-grid">
+            <!-- DHT Sensor Card -->
+            <div class="publisher-card">
+                <div class="card-header">
+                    <h3>🌡️ Sensor DHT11 - Suhu</h3>
+                    <span class="topic-badge sensor">sensor/dht</span>
+                </div>
+                <div class="input-group">
+                    <label for="tempInput">Masukkan Nilai Suhu (°C)</label>
+                    <input type="number" id="tempInput" placeholder="Contoh: 28.5" step="0.1" min="0" max="50">
+                </div>
+                <div class="quick-buttons">
+                    <button class="btn-quick" onclick="setQuickValue('tempInput', '25.0')">25°C</button>
+                    <button class="btn-quick" onclick="setQuickValue('tempInput', '28.0')">28°C</button>
+                    <button class="btn-quick" onclick="setQuickValue('tempInput', '30.5')">30.5°C</button>
+                    <button class="btn-quick" onclick="setQuickValue('tempInput', '35.0')">35°C</button>
+                </div>
+                <button class="btn-publish" onclick="publishData('sensor/dht', 'tempInput')">
+                    📤 Publish Suhu
+                </button>
+            </div>
+
+            <!-- Infrared Sensor Card -->
+            <div class="publisher-card">
+                <div class="card-header">
+                    <h3>📡 Sensor Infrared - Deteksi Objek</h3>
+                    <span class="topic-badge sensor">sensor/infrared</span>
+                </div>
+                <div class="input-group">
+                    <label for="irSelect">Pilih Status Deteksi</label>
+                    <select id="irSelect">
+                        <option value="DETECTED">DETECTED (Objek Terdeteksi)</option>
+                        <option value="NOT_DETECTED">NOT_DETECTED (Tidak Ada Objek)</option>
+                    </select>
+                </div>
+                <button class="btn-publish" onclick="publishData('sensor/infrared', 'irSelect')">
+                    📤 Publish Status IR
+                </button>
+            </div>
+
+            <!-- Servo Motor Card -->
+            <div class="publisher-card">
+                <div class="card-header">
+                    <h3>🔧 Motor Servo - Status Jendela</h3>
+                    <span class="topic-badge actuator">aktuator/servo</span>
+                </div>
+                <div class="input-group">
+                    <label for="servoSelect">Pilih Status Jendela</label>
+                    <select id="servoSelect">
+                        <option value="OPEN">OPEN (Jendela Terbuka)</option>
+                        <option value="CLOSED">CLOSED (Jendela Tertutup)</option>
+                    </select>
+                </div>
+                <button class="btn-publish" onclick="publishData('aktuator/servo', 'servoSelect')">
+                    📤 Publish Status Servo
+                </button>
+            </div>
+
+            <!-- LED RGB Card -->
+            <div class="publisher-card">
+                <div class="card-header">
+                    <h3>💡 LED RGB - Warna Indikator</h3>
+                    <span class="topic-badge actuator">aktuator/led</span>
+                </div>
+                <div class="input-group">
+                    <label for="ledSelect">Pilih Warna LED</label>
+                    <select id="ledSelect">
+                        <option value="RED">RED (Merah)</option>
+                        <option value="GREEN">GREEN (Hijau)</option>
+                    </select>
+                </div>
+                <button class="btn-publish" onclick="publishData('aktuator/led', 'ledSelect')">
+                    📤 Publish Warna LED
+                </button>
+            </div>
+        </div>
+
+        <!-- Log Section -->
+        <div class="log-section">
+            <h2>
+                📋 Log Aktivitas
+                <button class="btn-clear-log" onclick="clearLog()">🗑️ Hapus Log</button>
+            </h2>
+            <div class="log-container" id="logContainer">
+                <div class="log-entry info">
+                    <span class="log-time">[INFO]</span>
+                    Siap untuk publish data. Pastikan MQTT Broker sudah berjalan!
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/mqtt@4.3.7/dist/mqtt.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
